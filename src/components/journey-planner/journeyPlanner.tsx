@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import Search from "../search-bar/search";
 import { StopPoints } from "../search-bar/stop-points/stops";
 import GoButton from "./goButton";
+import Departure from "./time-options/departure-options/departure";
 
 type Action =
   | { type: "from"; destination: string }
@@ -70,7 +71,6 @@ export default function JourneyPlanner() {
     journeyPlannerObj
   );
 
-  //const [toggleState, setToggleStates] = useState(journeyPlannerObj);
 
   const navigate = useNavigate();
 
@@ -108,7 +108,6 @@ export default function JourneyPlanner() {
 
   }, [journeyPlannerState.from, journeyPlannerState.to]);
 
-  //console.log('togstates', toggleState)
 
   return (
     <Container
@@ -143,10 +142,12 @@ export default function JourneyPlanner() {
           {journeyPlannerState.errorMsg}
         </span>
       )}
-      <div style={{ width: "100%", display: "flex", justifyContent: "right" }}>
+      <div style={{ width: "100%", display: "flex", justifyContent: "space-between", padding:'0.3rem' }}>
+      <Departure/>
         <div className="go-button-container" onClick={() => handleSubmit()}>
-          <GoButton />
+           <GoButton />
         </div>
+        
       </div>
     </Container>
   );
