@@ -70,12 +70,22 @@
 }
 
 .departure-ctn{
-  color: #1976d2;
   display: flex;
   flex-direction: row;
-  gap:0.5rem;
+  gap:0.7rem;
   font-weight: 500;
   align-items: center;
+  cursor: pointer;
+  width: 50%;
+
+}
+
+.departure-arrive:hover{
+  color: rgba(25, 118, 210,1)
+}
+
+.departure-options{
+  gap : 0.7rem
 }
 
 @media (max-width: 768px) {
