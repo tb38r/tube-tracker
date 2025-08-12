@@ -1,58 +1,122 @@
 import {
   FormControl,
-  InputLabel,
   MenuItem,
   Select,
   type SelectChangeEvent,
 } from "@mui/material";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { minutesAndHoursSX } from "./styles/helpers";
+import "./styles/time.css";
+
+const selectStyles = { fontSize: "0.85em", fontWeight: "600" };
+
+const hoursArr = [
+  "00",
+  "01",
+  "02",
+  "03",
+  "04",
+  "05",
+  "06",
+  "07",
+  "08",
+  "09",
+  "10",
+  "11",
+  "12",
+  "13",
+  "14",
+  "15",
+  "16",
+  "17",
+  "18",
+  "19",
+  "20",
+  "21",
+  "22",
+  "23",
+  "24",
+];
+
+const minutesArr = ["00", "10", "20", "30", "40", "50"];
 
 export default function SelectTime() {
-  const [day, setDay] = useState("Monday");
+  const [hour, setHour] = useState("");
+  const [min, setMin] = useState("");
 
-  const handleDayChange = (event: SelectChangeEvent) => {
-    setDay(event.target.value);
+  const handleHourChange = (event: SelectChangeEvent) => {
+    setHour(event.target.value);
   };
 
+  const handleMinuteChange = (event: SelectChangeEvent) => {
+    setHour(event.target.value);
+  };
+
+  useEffect(() => {
+    const currentHour = new Date().getHours().toString().padStart(2, "0");
+    setHour(currentHour);
+
+    const currentMin = new Date().getMinutes();
+    const roundedUp = Math.ceil(currentMin / 10) * 10;
+    const nextMinute = roundedUp >= 60 ? "00" : roundedUp.toString().padStart(2, "0");
+    setMin(nextMinute);
+  }, []);
+
   return (
-    <div>
-      <FormControl variant="standard" sx={{ minWidth: 120 }}>
-        <InputLabel id="select-day">Day</InputLabel>
-        <Select
-        disableUnderline
-          labelId="select-day"
-          id="select-day"
-          value={day}
-          onChange={handleDayChange}
-          label="Age"
-          MenuProps={{
-            anchorOrigin: {
-              vertical: 'top', 
-              horizontal: 'center',
-            },
-          }}
-          sx={{
-            width: "8rem",
-            height: "2rem",
-            backgroundColor: "rgb(180, 200, 208)",
-            borderRadius:'0.4rem',
-            color:"white",
-            fontWeight:'800',
-            paddingLeft:'0.4rem',
-            textAlign:''
-          }}
-        >
-          <MenuItem sx={{ fontSize: "0.9em", fontWeight:'700' }} value={"Monday"}>
-            Monday
-          </MenuItem>
-          <MenuItem sx={{ fontSize: "0.9em" }} value={"Tuesday"}>
-            Tuesday
-          </MenuItem>
-          <MenuItem sx={{ fontSize: "0.9em" }} value={"Wednesdat"}>
-            Wednesday
-          </MenuItem>
-        </Select>
-      </FormControl>
+    <div className="select-hour-and-minute">
+      <div className="select-hour">
+        <FormControl variant={"standard"}>
+          <Select
+            disableUnderline={true}
+            IconComponent={() => null}
+            labelId="select-hour"
+            id="select-hour"
+            value={hour}
+            onChange={handleHourChange}
+            label="Age"
+            MenuProps={{
+              anchorOrigin: {
+                vertical: "top",
+                horizontal: "center",
+              },
+            }}
+            sx={minutesAndHoursSX}
+          >
+            {hoursArr.map((hour) => (
+              <MenuItem sx={selectStyles} value={hour}>
+                {hour}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+      </div>
+
+      <div className="select-minute">
+        <FormControl variant={"standard"}>
+          <Select
+            disableUnderline={true}
+            IconComponent={() => null}
+            labelId="select-min"
+            id="select-min"
+            value={min}
+            onChange={handleMinuteChange}
+            label="Age"
+            MenuProps={{
+              anchorOrigin: {
+                vertical: "top",
+                horizontal: "center",
+              },
+            }}
+            sx={minutesAndHoursSX}
+          >
+            {minutesArr.map((min) => (
+              <MenuItem sx={selectStyles} value={min}>
+                {min}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+      </div>
     </div>
   );
 }
