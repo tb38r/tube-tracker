@@ -8,8 +8,10 @@ export default function Departure() {
 
   const [showOptions, setShowOptions] = useState("none");
   const [isPinned, setIsPinned] = useState(false);
+  const [isActive, setIsActive] = useState("Now")
 
   const handleHover = () => {
+    if(isPinned)return
     setShowOptions("flex");
   };
 
@@ -24,27 +26,30 @@ export default function Departure() {
   const handleArrive = (event: React.SyntheticEvent) => {
     event.stopPropagation();
     setIsPinned(true);
+    setIsActive("Arrive")
     setShowOptions("flex");
     setArriveOpacity(1);
-    setNowOpacity((opacity) => (opacity === 0.5 ? opacity : 0.5));
-    setLeaveOpacity((opacity) => (opacity === 0.5 ? opacity : 0.5));
+    setNowOpacity(0.5);
+    setLeaveOpacity(0.5);
   };
 
   const handleNow = (event: React.SyntheticEvent) => {
     event.stopPropagation();
     setIsPinned(false);
-    setNowOpacity((opacity) => (opacity === 1 ? opacity : 1));
-    setLeaveOpacity((opacity) => (opacity === 0.5 ? opacity : 0.5));    setLeaveOpacity((opacity) => (opacity === 0.5 ? opacity : 0.5));
-    setArriveOpacity((opacity) => (opacity === 0.5 ? opacity : 0.5));
+    setIsActive("Now")
+    setNowOpacity(1)
+    setLeaveOpacity(0.5);    
+    setArriveOpacity(0.5);
 
   };
 
   const handleLeave = (event: React.SyntheticEvent) => {
     event.stopPropagation();
-    setIsPinned(false);
+    setIsPinned(true);
+    setIsActive("Leave")
     setLeaveOpacity(1);    
-    setNowOpacity((opacity) => (opacity === 0.5 ? opacity : 0.5));
-    setArriveOpacity((opacity) => (opacity === 0.5 ? opacity : 0.5));
+    setNowOpacity(0.5);
+    setArriveOpacity(0.5);
 
   };
 
@@ -61,7 +66,7 @@ export default function Departure() {
         }}
       >
         <span onClick={handleNow}>Now</span>
-        <span className="departure-gt">&gt;</span>
+        <span className="departure-gt" style={{display:isPinned? 'none':'block'}}>&gt;</span>
       </div>
       <div
         className="departure-options"
