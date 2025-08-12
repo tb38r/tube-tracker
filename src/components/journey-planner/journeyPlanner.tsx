@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import Search from "../search-bar/search";
 import { StopPoints } from "../search-bar/stop-points/stops";
 import GoButton from "./goButton";
-import Departure from "./time-options/departure-options/departure";
+import Departure from "./time-options/departure";
 
 type Action =
   | { type: "from"; destination: string }

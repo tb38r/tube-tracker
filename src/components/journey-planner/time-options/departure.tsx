@@ -1,4 +1,5 @@
 import { useState } from "react";
+import SelectTime from "./selectTime";
 
 export default function Departure() {
   // const [opacity, setOpacity] = useState(0.5);
@@ -54,6 +55,7 @@ export default function Departure() {
   };
 
   return (
+    <div className="time-options">
     <div
       className="departure-ctn"
       onMouseEnter={handleHover}
@@ -90,6 +92,8 @@ export default function Departure() {
           Leave
         </div>
       </div>
+    </div>
+    <SelectTime/>
     </div>
   );
 }
