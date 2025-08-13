@@ -1,5 +1,5 @@
 import { useState } from "react";
-import SelectDay from "./selectDay";
+import SelectDayAndTime from "./selectDayAndTime";
 
 export default function Departure() {
   const [nowOpacity, setNowOpacity] = useState(1);
@@ -92,7 +92,7 @@ export default function Departure() {
         </div>
       </div>
     </div>
-    <SelectDay/>
+    <SelectDayAndTime/>
     </div>
   );
 }

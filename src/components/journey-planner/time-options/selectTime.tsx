@@ -44,11 +44,11 @@ export default function SelectTime({ isToday }: isTodayProps) {
     console.log("curr", currentMin);
     if (isToday) {
       const newHoursOptions = tailHours(hoursArr, currentHour);
-      setHourOptions(newHoursOptions);
+      currentMin > 50 ? setHourOptions(newHoursOptions.slice(1)): setHourOptions(newHoursOptions);
 
       if (hour === currentHour) {
         const newMinOptions = tailMins(minutesArr, currentMin);
-        setMinOptions(newMinOptions);
+        currentMin > 50 ? setMinOptions(minutesArr):setMinOptions(newMinOptions);
       } else {
         setMinOptions(minutesArr);
       }

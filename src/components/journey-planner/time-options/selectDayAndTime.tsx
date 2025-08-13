@@ -5,7 +5,7 @@ import { JourneySelect } from "./journey-select";
 import SelectTime from "./selectTime";
 import "./styles/time.css";
 
-export default function SelectDay() {
+export default function SelectDayAndTime() {
   const [day, setDay] = useState<string>("");
   const [dayOptions, setDayOptions] = useState<string[]>([]);
   const [isToday, setIsToday] = useState<boolean>(false);
