@@ -2,7 +2,6 @@ import { useState } from "react";
 import SelectDay from "./selectDay";
 
 export default function Departure() {
-  // const [opacity, setOpacity] = useState(0.5);
   const [nowOpacity, setNowOpacity] = useState(1);
   const [arriveOpacity, setArriveOpacity] = useState(0.5);
   const [leaveOpacity, setLeaveOpacity] = useState(0.5);

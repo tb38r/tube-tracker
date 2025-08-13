@@ -1,121 +1,85 @@
-import {
-  FormControl,
-  MenuItem,
-  Select,
-  type SelectChangeEvent,
-} from "@mui/material";
+import { type SelectChangeEvent } from "@mui/material";
 import { useEffect, useState } from "react";
-import { minutesAndHoursSX } from "./styles/helpers";
+import {
+  hoursArr,
+  minutesAndHoursSX,
+  minutesArr,
+  tailHours,
+  tailMins,
+} from "./helpers";
+import { JourneySelect } from "./journey-select";
 import "./styles/time.css";
 
-const selectStyles = { fontSize: "0.85em", fontWeight: "600" };
+type isTodayProps = {
+  isToday: boolean;
+};
 
-const hoursArr = [
-  "00",
-  "01",
-  "02",
-  "03",
-  "04",
-  "05",
-  "06",
-  "07",
-  "08",
-  "09",
-  "10",
-  "11",
-  "12",
-  "13",
-  "14",
-  "15",
-  "16",
-  "17",
-  "18",
-  "19",
-  "20",
-  "21",
-  "22",
-  "23",
-  "24",
-];
-
-const minutesArr = ["00", "10", "20", "30", "40", "50"];
-
-export default function SelectTime() {
+export default function SelectTime({ isToday }: isTodayProps) {
   const [hour, setHour] = useState("");
   const [min, setMin] = useState("");
+  const [hourOptions, setHourOptions] = useState(hoursArr);
+  const [minOptions, setMinOptions] = useState(minutesArr);
+
+  const currentHour = new Date().getHours().toString().padStart(2, "0");
+  const currentMin = new Date().getMinutes();
+
+  const roundedUp = Math.ceil(currentMin / 10) * 10;
+  const nextMinute =
+    roundedUp >= 60 ? "00" : roundedUp.toString().padStart(2, "0");
 
   const handleHourChange = (event: SelectChangeEvent) => {
     setHour(event.target.value);
   };
 
   const handleMinuteChange = (event: SelectChangeEvent) => {
-    setHour(event.target.value);
+    setMin(event.target.value);
   };
 
   useEffect(() => {
-    const currentHour = new Date().getHours().toString().padStart(2, "0");
     setHour(currentHour);
-
-    const currentMin = new Date().getMinutes();
-    const roundedUp = Math.ceil(currentMin / 10) * 10;
-    const nextMinute = roundedUp >= 60 ? "00" : roundedUp.toString().padStart(2, "0");
     setMin(nextMinute);
   }, []);
+
+  useEffect(() => {
+    console.log("curr", currentMin);
+    if (isToday) {
+      const newHoursOptions = tailHours(hoursArr, currentHour);
+      setHourOptions(newHoursOptions);
+
+      if (hour === currentHour) {
+        const newMinOptions = tailMins(minutesArr, currentMin);
+        setMinOptions(newMinOptions);
+      } else {
+        setMinOptions(minutesArr);
+      }
+    } else {
+      setHourOptions(hoursArr);
+      setMinOptions(minutesArr);
+    }
+  }, [isToday, hour]);
 
   return (
     <div className="select-hour-and-minute">
       <div className="select-hour">
-        <FormControl variant={"standard"}>
-          <Select
-            disableUnderline={true}
-            IconComponent={() => null}
-            labelId="select-hour"
-            id="select-hour"
-            value={hour}
-            onChange={handleHourChange}
-            label="Age"
-            MenuProps={{
-              anchorOrigin: {
-                vertical: "top",
-                horizontal: "center",
-              },
-            }}
-            sx={minutesAndHoursSX}
-          >
-            {hoursArr.map((hour) => (
-              <MenuItem sx={selectStyles} value={hour}>
-                {hour}
-              </MenuItem>
-            ))}
-          </Select>
-        </FormControl>
+        <JourneySelect
+          id="hour"
+          value={hour}
+          label="hour-select"
+          onChange={handleHourChange}
+          options={hourOptions}
+          sx={minutesAndHoursSX}
+        />
       </div>
 
       <div className="select-minute">
-        <FormControl variant={"standard"}>
-          <Select
-            disableUnderline={true}
-            IconComponent={() => null}
-            labelId="select-min"
-            id="select-min"
-            value={min}
-            onChange={handleMinuteChange}
-            label="Age"
-            MenuProps={{
-              anchorOrigin: {
-                vertical: "top",
-                horizontal: "center",
-              },
-            }}
-            sx={minutesAndHoursSX}
-          >
-            {minutesArr.map((min) => (
-              <MenuItem sx={selectStyles} value={min}>
-                {min}
-              </MenuItem>
-            ))}
-          </Select>
-        </FormControl>
+        <JourneySelect
+          id="min"
+          value={min}
+          label="min-select"
+          onChange={handleMinuteChange}
+          options={minOptions}
+          sx={minutesAndHoursSX}
+        />
       </div>
     </div>
   );
