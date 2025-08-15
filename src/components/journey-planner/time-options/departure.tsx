@@ -23,7 +23,6 @@ export default function Departure() {
     }
   };
 
-
   const setMode = (
     mode: "Arrive" | "Now" | "Leave",
     pinned: boolean,
@@ -95,7 +94,7 @@ export default function Departure() {
           </div>
         </div>
       </div>
-      <SelectDayAndTime />
+      {isActive !== "Now" && <SelectDayAndTime />}
     </div>
   );
 }

@@ -92,3 +92,39 @@ export interface FavouriteKeys {
   to: string;
   id: string;
 }
+
+export type Action =
+  | { type: "from"; destination: string }
+  | { type: "to"; destination: string }
+  | {
+      type: "error";
+      destination: string;
+    }
+  | {
+      type: "type";
+      destination: string;
+    }
+  | {
+      type: "period";
+      destination: string;
+    }
+  | {
+      type: "hour";
+      destination: string;
+    }
+  | {
+      type: "minute";
+      destination: string;
+    };
+
+export interface State {
+  from: string;
+  to: string;
+  error: boolean;
+  errorMsg: string;
+  type: string;
+  period: string;
+  hour: string;
+  minute: string;
+}
+
