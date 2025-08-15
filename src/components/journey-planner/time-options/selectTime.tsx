@@ -41,25 +41,25 @@ export default function SelectTime({ isToday }: isTodayProps) {
   }, []);
 
   useEffect(() => {
-    if (isToday) {
-      const newHoursOptions = tailHours(hoursArr, currentHour);
-      const newMinOptions = tailMins(minutesArr, currentMin);
-      if (currentMin > 50) {
-        setHourOptions(newHoursOptions.slice(1) || hourOptions);
-        setMinOptions(minOptions);
-        setHour(hourOptions[0]);
-        setMin(minOptions[0]);
-      } else {
-        setHourOptions(newHoursOptions);
-        setMinOptions(newMinOptions);
-        setHour(hourOptions[0]);
-        setMin(minOptions[0]);
-      }
-    } else {
+    if (!isToday) {
       setHourOptions(hoursArr);
       setMinOptions(minutesArr);
+      return;
     }
-  }, [isToday, hour]);
+  
+    const newHours = tailHours(hoursArr, currentHour);
+    const newMins = tailMins(minutesArr, currentMin);
+  
+    const isLate = currentMin > 50;
+    const validHour = isLate ? newHours[1] : newHours[0];
+    const validMins = validHour === currentHour ? newMins : minutesArr;
+  
+    setHourOptions(isLate ? newHours.slice(1) : newHours);
+    setMinOptions(validMins);
+    setHour(validHour);
+    setMin(validMins[0]);
+  }, [isToday]);
+  
 
   return (
     <div className="select-hour-and-minute">
