@@ -34,7 +34,7 @@ function reducer(state: State, action: Action): State {
     return {
       ...state,
       error: true,
-      errorMsg: `Error : ${action.destination}`,
+      errorMsg: `${action.destination}`,
     };
   }
 
@@ -138,8 +138,8 @@ export default function JourneyPlanner() {
 
       <Search placeholder="End" updateStation={handleToDestination} value={journeyPlannerState.to}/>
       {journeyPlannerState.error && (
-        <span style={{ color: "red" }} className="journey-error">
-          {journeyPlannerState.errorMsg}
+        <span style={{ backgroundColor: "rgb(235 44 44)", display:'flex', justifyContent:'center', fontWeight:'500', margin:'0.25rem', borderRadius:'0.3rem' }} className="journey-error">
+         <span>&#9888;&nbsp;</span> {journeyPlannerState.errorMsg}
         </span>
       )}
       <div style={{ width: "100%", display: "flex", justifyContent: "space-between", padding:'0.3rem' }}>

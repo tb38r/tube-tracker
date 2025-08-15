@@ -41,16 +41,19 @@ export default function SelectTime({ isToday }: isTodayProps) {
   }, []);
 
   useEffect(() => {
-    console.log("curr", currentMin);
     if (isToday) {
       const newHoursOptions = tailHours(hoursArr, currentHour);
-      currentMin > 50 ? setHourOptions(newHoursOptions.slice(1)): setHourOptions(newHoursOptions);
-
-      if (hour === currentHour) {
-        const newMinOptions = tailMins(minutesArr, currentMin);
-        currentMin > 50 ? setMinOptions(minutesArr):setMinOptions(newMinOptions);
+      const newMinOptions = tailMins(minutesArr, currentMin);
+      if (currentMin > 50) {
+        setHourOptions(newHoursOptions.slice(1) || hourOptions);
+        setMinOptions(minOptions);
+        setHour(hourOptions[0]);
+        setMin(minOptions[0]);
       } else {
-        setMinOptions(minutesArr);
+        setHourOptions(newHoursOptions);
+        setMinOptions(newMinOptions);
+        setHour(hourOptions[0]);
+        setMin(minOptions[0]);
       }
     } else {
       setHourOptions(hoursArr);
