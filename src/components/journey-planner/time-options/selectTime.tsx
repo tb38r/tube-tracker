@@ -23,9 +23,9 @@ export default function SelectTime({ isToday }: isTodayProps) {
   const currentHour = new Date().getHours().toString().padStart(2, "0");
   const currentMin = new Date().getMinutes();
 
-  const roundedUp = Math.ceil(currentMin / 10) * 10;
-  const nextMinute =
-    roundedUp >= 60 ? "00" : roundedUp.toString().padStart(2, "0");
+  // const roundedUp = Math.ceil(currentMin / 10) * 10;
+  // const nextMinute =
+  //   roundedUp >= 60 ? "00" : roundedUp.toString().padStart(2, "0");
 
   const handleHourChange = (event: SelectChangeEvent) => {
     setHour(event.target.value);
@@ -35,10 +35,7 @@ export default function SelectTime({ isToday }: isTodayProps) {
     setMin(event.target.value);
   };
 
-  useEffect(() => {
-    setHour(currentHour);
-    setMin(nextMinute);
-  }, []);
+
 
   useEffect(() => {
     if (!isToday) {
@@ -48,17 +45,32 @@ export default function SelectTime({ isToday }: isTodayProps) {
     }
   
     const newHours = tailHours(hoursArr, currentHour);
-    const newMins = tailMins(minutesArr, currentMin);
-  
     const isLate = currentMin > 50;
-    const validHour = isLate ? newHours[1] : newHours[0];
-    const validMins = validHour === currentHour ? newMins : minutesArr;
+    const hoursOpts = isLate ? newHours.slice(1) : newHours;
   
-    setHourOptions(isLate ? newHours.slice(1) : newHours);
-    setMinOptions(validMins);
-    setHour(validHour);
-    setMin(validMins[0]);
-  }, [isToday]);
+    if (!hoursOpts.length) {
+      setHourOptions([]);
+      setMinOptions([]);
+      setHour("");
+      setMin("");
+      return;
+    }
+  
+    setHourOptions(hoursOpts);
+  
+    const nextHour = hoursOpts.includes(hour) ? hour : hoursOpts[0];
+  
+    const minsForHour =
+      nextHour === currentHour ? tailMins(minutesArr, currentMin) : minutesArr;
+  
+    setMinOptions(minsForHour);
+  
+    const nextMin = minsForHour.includes(min) ? min : minsForHour[0];
+  
+    if (nextHour !== hour) setHour(nextHour);
+    if (nextMin !== min) setMin(nextMin);
+  }, [isToday, currentHour, currentMin, hour, min]);
+  
   
 
   return (
