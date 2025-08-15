@@ -143,7 +143,7 @@ export default function JourneyPlanner() {
         </span>
       )}
       <div style={{ width: "100%", display: "flex", justifyContent: "space-between", padding:'0.3rem' }}>
-      <Departure/>
+      <Departure />
         <div className="go-button-container" onClick={() => handleSubmit()}>
            <GoButton />
         </div>
