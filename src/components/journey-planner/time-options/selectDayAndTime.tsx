@@ -21,7 +21,6 @@ export default function SelectDayAndTime(props: DayAndTimeProps) {
   const handleDayChange = (event: SelectChangeEvent) => {
     const period = event.target.value;
     setDay(period);
-    handlePeriod(period);
   };
 
   useEffect(() => {
@@ -32,6 +31,7 @@ export default function SelectDayAndTime(props: DayAndTimeProps) {
 
   useEffect(() => {
     day === "Today" ? setIsToday(true) : setIsToday(false);
+    handlePeriod(day)
   }, [day]);
 
   return (

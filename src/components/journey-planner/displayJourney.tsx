@@ -1,24 +1,29 @@
-import { useParams } from "react-router-dom";
-import { useEffect, useState, useCallback } from "react";
-import { LinearProgress } from "@mui/material";
-import { UndergroundStations } from "./types/undergroundStops";
-import type { JourneyResult } from "./types/journey-types";
-import { formatTime } from "../../utils/helpers";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import FavoriteBorderOutlinedIcon from "@mui/icons-material/FavoriteBorderOutlined";
-import "./styles/journey-planner.css";
+import { LinearProgress } from "@mui/material";
+import { useCallback, useEffect, useMemo, useState } from "react";
+import { useParams } from "react-router-dom";
+import {
+  CreateQueryString,
+  IsFavourite,
+  formatTime,
+} from "../../utils/helpers";
 import { useLocaLStore, type JourneyObject } from "../hooks/useLocalStore";
+import "./styles/journey-planner.css";
 import { LightTooltip } from "./styles/styles";
-import { IsFavourite } from "../../utils/helpers";
+import type { JourneyResult } from "./types/journey-types";
+import { UndergroundStations } from "./types/undergroundStops";
 
 export default function DisplayJourney() {
-  const { from, to } = useParams();
   const [isInValid, setIsInValid] = useState(true);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
   const [data, setData] = useState<JourneyResult>();
   const [journies, saveJourney, removeJourney] = useLocaLStore();
+
+  const { from, to, type, period, hour, minute } = useParams();
+  console.log(from, to, type, period, hour, minute);
 
   const apiKey = import.meta.env.VITE_API_KEY;
 
@@ -42,46 +47,47 @@ export default function DisplayJourney() {
     }
   }, [from, to]);
 
+  const queryString = useMemo(() => {
+    const fromDest =
+      UndergroundStations[from as keyof typeof UndergroundStations];
+    const toDest = UndergroundStations[to as keyof typeof UndergroundStations];
+    return CreateQueryString({ fromDest, toDest, type, period, hour, minute });
+  }, [from, to, type, period, hour, minute]);
+
   useEffect(() => {
-    if (!isInValid) {
-      setLoading(true);
+    if (isInValid) return;
+    setLoading(true);
 
-      const fromDest =
-        UndergroundStations[from as keyof typeof UndergroundStations];
-      const toDest =
-        UndergroundStations[to as keyof typeof UndergroundStations];
+    (async () => {
+      try {
+        const response = await fetch(
+          `https://api.tfl.gov.uk/journey/journeyresults/${queryString}?app_key=${apiKey}&mode=tube`
+        );
 
-      (async () => {
-        try {
-          const response = await fetch(
-            `https://api.tfl.gov.uk/journey/journeyresults/${fromDest}/to/${toDest}?app_key=${apiKey}&mode=tube`
-          );
-
-          if (!response.ok) {
-            setLoading(false);
-            setError(true);
-            setErrorMsg(`Unable to retrieve data for ${from} to ${to}`);
-            return;
-          }
-
-          const data = await response.json();
-        
-
-          setData(data);
-          setLoading(false);
-        } catch (err) {
+        if (!response.ok) {
           setLoading(false);
           setError(true);
-          let message = `An unexpected error occurred`;
-          if (err instanceof Error) {
-            message = `Unable to retrieve data for ${from} to ${to} \n ${err.message}`;
-          }
-          setErrorMsg(message);
-          console.error("Failed to retrieve journey:", err);
+          setErrorMsg(`Unable to retrieve data for ${from} to ${to}`);
+          return;
         }
-      })();
-    }
-  }, [isInValid, from, to, apiKey]);
+
+        const data = await response.json();
+
+        setData(data);
+        setLoading(false);
+        setError(false);
+      } catch (err) {
+        setLoading(false);
+        setError(true);
+        let message = `An unexpected error occurred`;
+        if (err instanceof Error) {
+          message = `Unable to retrieve data for ${from} to ${to} \n ${err.message}`;
+        }
+        setErrorMsg(message);
+        console.error("Failed to retrieve journey:", err);
+      }
+    })();
+  }, [isInValid, from, to, apiKey, queryString]);
 
   const handleFavourite = useCallback(() => {
     if (IsFavourite(from, to, journies) && from && to) {
@@ -97,7 +103,6 @@ export default function DisplayJourney() {
     };
     saveJourney(journeyToSave);
   }, [from, to, journies, saveJourney, removeJourney]);
-
 
   return (
     <>
@@ -120,7 +125,7 @@ export default function DisplayJourney() {
         {error && <div style={{ color: "red" }}>Error: {errorMsg}</div>}
 
         <>
-          {data && (
+          {!loading && !error && data && (
             <div className="title-container">
               <div className="journey-title">Journey results</div>
               <div className="journey-subtitle">
@@ -131,10 +136,13 @@ export default function DisplayJourney() {
                   style={{ cursor: "pointer" }}
                 >
                   <LightTooltip
-                    title={IsFavourite(from, to, journies)? "Unmark Favourite": "Save to Favourites"}
+                    title={
+                      IsFavourite(from, to, journies)
+                        ? "Unmark Favourite"
+                        : "Save to Favourites"
+                    }
                     placement="left"
                     style={{ color: "red" }}
-
                   >
                     {IsFavourite(from, to, journies) ? (
                       <FavoriteIcon />
@@ -146,7 +154,9 @@ export default function DisplayJourney() {
               </div>
             </div>
           )}
-          {data &&
+          {!loading &&
+            !error &&
+            data &&
             data?.journeys?.map((journey, index) => (
               <div key={index} className="journey-leg-card">
                 <>

@@ -1,4 +1,7 @@
-import { type FavouriteKeys } from "../components/journey-planner/types/journey-types";
+import type {
+  FavouriteKeys,
+  createQueryArgs,
+} from "../components/journey-planner/types/journey-types";
 
 export const formatTime = (time: string) => {
   const date = new Date(time);
@@ -20,4 +23,20 @@ export const IsFavourite = (
   return favsToArr.some(
     (favItem: FavouriteKeys) => favItem.from === from && favItem.to === to
   );
+};
+
+export const CreateQueryString = ({
+  fromDest,
+  toDest,
+  type,
+  period,
+  hour,
+  minute,
+}: createQueryArgs): string => {
+  if (type === "Now") {
+    const result = `${fromDest}/to/${toDest}`;
+    console.log("qstring", result);
+    return result;
+  }
+  return "";
 };

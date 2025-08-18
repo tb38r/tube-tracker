@@ -1,8 +1,7 @@
-
-export type JourneyResult ={
-  journeys : Journey[];
-  lines : []
-}
+export type JourneyResult = {
+  journeys: Journey[];
+  lines: [];
+};
 
 export interface Journey {
   startDateTime: string;
@@ -128,3 +127,11 @@ export interface State {
   minute: string;
 }
 
+export type createQueryArgs = {
+  fromDest: string | undefined;
+  toDest: string | undefined;
+  type: string | undefined;
+  period: string | undefined;
+  hour: string | undefined;
+  minute: string | undefined;
+};

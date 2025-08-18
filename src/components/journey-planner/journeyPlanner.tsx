@@ -15,7 +15,7 @@ export default function JourneyPlanner() {
 
   const navigate = useNavigate();
 
-  console.log("jps", journeyPlannerState)
+  console.log("jps", journeyPlannerState);
 
   const handleFromDestination = (dest: string) => {
     dispatch({ type: "from", destination: dest });
@@ -51,9 +51,8 @@ export default function JourneyPlanner() {
         destination: "Cannot navigate to & from the same destination",
       });
     } else {
-      navigate(
-        `/journey/${journeyPlannerState.from}/${journeyPlannerState.to}`
-      );
+      const { from, to, type, period, hour, minute } = journeyPlannerState;
+      navigate(`/journey/${from}/${to}/${type}/${period}/${hour}/${minute}/`);
     }
   };
 

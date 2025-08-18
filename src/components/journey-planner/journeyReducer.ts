@@ -6,7 +6,7 @@ export const journeyPlannerInitialState: State = {
   to: "",
   error: false,
   errorMsg: "",
-  type: "",
+  type: "Now",
   period: "",
   hour: "",
   minute: "",

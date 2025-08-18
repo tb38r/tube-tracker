@@ -30,16 +30,18 @@ export default function SelectTime(props: TimeProps) {
   const handleHourChange = (event: SelectChangeEvent) => {
     const hour = event.target.value;
     setHour(hour);
-    handleHour(hour);
   };
 
   const handleMinuteChange = (event: SelectChangeEvent) => {
     const minute = event.target.value;
     setMin(minute);
-    handleMinute(minute);
   };
 
   useEffect(() => {
+    handleHour(hour);
+    handleMinute(min);
+
+
     if (!isToday) {
       setHourOptions(hoursArr);
       setMinOptions(minutesArr);
