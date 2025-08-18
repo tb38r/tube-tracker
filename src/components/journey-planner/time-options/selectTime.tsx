@@ -10,32 +10,34 @@ import {
 import { JourneySelect } from "./journey-select";
 import "./styles/time.css";
 
-type isTodayProps = {
+interface TimeProps {
   isToday: boolean;
-};
+  handleHour: (type: string) => void;
+  handleMinute: (type: string) => void;
+}
 
-export default function SelectTime({ isToday }: isTodayProps) {
+export default function SelectTime(props: TimeProps) {
   const [hour, setHour] = useState("");
   const [min, setMin] = useState("");
   const [hourOptions, setHourOptions] = useState(hoursArr);
   const [minOptions, setMinOptions] = useState(minutesArr);
 
+  const { isToday, handleHour, handleMinute } = props;
+
   const currentHour = new Date().getHours().toString().padStart(2, "0");
   const currentMin = new Date().getMinutes();
 
-  // const roundedUp = Math.ceil(currentMin / 10) * 10;
-  // const nextMinute =
-  //   roundedUp >= 60 ? "00" : roundedUp.toString().padStart(2, "0");
-
   const handleHourChange = (event: SelectChangeEvent) => {
-    setHour(event.target.value);
+    const hour = event.target.value;
+    setHour(hour);
+    handleHour(hour);
   };
 
   const handleMinuteChange = (event: SelectChangeEvent) => {
-    setMin(event.target.value);
+    const minute = event.target.value;
+    setMin(minute);
+    handleMinute(minute);
   };
-
-
 
   useEffect(() => {
     if (!isToday) {
@@ -43,11 +45,11 @@ export default function SelectTime({ isToday }: isTodayProps) {
       setMinOptions(minutesArr);
       return;
     }
-  
+
     const newHours = tailHours(hoursArr, currentHour);
     const isLate = currentMin > 50;
     const hoursOpts = isLate ? newHours.slice(1) : newHours;
-  
+
     if (!hoursOpts.length) {
       setHourOptions([]);
       setMinOptions([]);
@@ -55,23 +57,21 @@ export default function SelectTime({ isToday }: isTodayProps) {
       setMin("");
       return;
     }
-  
+
     setHourOptions(hoursOpts);
-  
+
     const nextHour = hoursOpts.includes(hour) ? hour : hoursOpts[0];
-  
+
     const minsForHour =
       nextHour === currentHour ? tailMins(minutesArr, currentMin) : minutesArr;
-  
+
     setMinOptions(minsForHour);
-  
+
     const nextMin = minsForHour.includes(min) ? min : minsForHour[0];
-  
+
     if (nextHour !== hour) setHour(nextHour);
     if (nextMin !== min) setMin(nextMin);
   }, [isToday, currentHour, currentMin, hour, min]);
-  
-  
 
   return (
     <div className="select-hour-and-minute">

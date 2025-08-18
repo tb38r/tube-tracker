@@ -5,13 +5,23 @@ import { JourneySelect } from "./journey-select";
 import SelectTime from "./selectTime";
 import "./styles/time.css";
 
-export default function SelectDayAndTime() {
+interface DayAndTimeProps {
+  handlePeriod: (type: string) => void;
+  handleHour: (type: string) => void;
+  handleMinute: (type: string) => void;
+}
+
+export default function SelectDayAndTime(props: DayAndTimeProps) {
   const [day, setDay] = useState<string>("");
   const [dayOptions, setDayOptions] = useState<string[]>([]);
   const [isToday, setIsToday] = useState<boolean>(false);
 
+  const { handlePeriod, handleHour, handleMinute } = props;
+
   const handleDayChange = (event: SelectChangeEvent) => {
-    setDay(event.target.value);
+    const period = event.target.value;
+    setDay(period);
+    handlePeriod(period);
   };
 
   useEffect(() => {
@@ -34,7 +44,11 @@ export default function SelectDayAndTime() {
         sx={daysSX}
         value={day}
       />
-      <SelectTime isToday = {isToday} />
+      <SelectTime
+        isToday={isToday}
+        handleHour={handleHour}
+        handleMinute={handleMinute}
+      />
     </div>
   );
 }

@@ -13,13 +13,13 @@ export const journeyPlannerInitialState: State = {
 };
 
 export function journeyReducer(state: State, action: Action): State {
-  if (!(action.destination in StopPoints) && action.type !== "error") {
-    return {
-      ...state,
-      error: true,
-      errorMsg: `${action.destination}`,
-    };
-  }
+  // if (!(action.destination in StopPoints) && action.type !== "error") {
+  //   return {
+  //     ...state,
+  //     error: true,
+  //     errorMsg: `${action.destination}`,
+  //   };
+  // }
 
   switch (action.type) {
     case "error":

@@ -15,6 +15,8 @@ export default function JourneyPlanner() {
 
   const navigate = useNavigate();
 
+  console.log("jps", journeyPlannerState)
+
   const handleFromDestination = (dest: string) => {
     dispatch({ type: "from", destination: dest });
   };
@@ -117,7 +119,12 @@ export default function JourneyPlanner() {
           padding: "0.3rem",
         }}
       >
-        <Departure />
+        <Departure
+          handleType={handleType}
+          handlePeriod={handlePeriod}
+          handleHour={handleHour}
+          handleMinute={handleMinute}
+        />
         <div className="go-button-container" onClick={() => handleSubmit()}>
           <GoButton />
         </div>
@@ -125,4 +132,3 @@ export default function JourneyPlanner() {
     </Container>
   );
 }
-

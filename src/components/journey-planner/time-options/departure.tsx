@@ -1,7 +1,14 @@
 import { useState } from "react";
 import SelectDayAndTime from "./selectDayAndTime";
 
-export default function Departure() {
+interface DepartureProps {
+  handleType: (type: string) => void;
+  handlePeriod: (type: string) => void;
+  handleHour: (type: string) => void;
+  handleMinute: (type: string) => void;
+}
+
+export default function Departure(props: DepartureProps) {
   const [nowOpacity, setNowOpacity] = useState(1);
   const [arriveOpacity, setArriveOpacity] = useState(0.5);
   const [leaveOpacity, setLeaveOpacity] = useState(0.5);
@@ -9,6 +16,8 @@ export default function Departure() {
   const [showOptions, setShowOptions] = useState("none");
   const [isPinned, setIsPinned] = useState(false);
   const [isActive, setIsActive] = useState("Now");
+
+  const { handleType, handlePeriod, handleHour, handleMinute } = props;
 
   const handleHover = () => {
     if (isPinned) return;
@@ -39,16 +48,19 @@ export default function Departure() {
     event.stopPropagation();
     setShowOptions("flex");
     setMode("Arrive", true, { arrive: 1, now: 0.5, leave: 0.5 });
+    handleType("Arrive")
   };
 
   const handleNow = (event: React.SyntheticEvent) => {
     event.stopPropagation();
     setMode("Now", false, { arrive: 0.5, now: 1, leave: 0.5 });
+    handleType("Now")
   };
 
   const handleLeave = (event: React.SyntheticEvent) => {
     event.stopPropagation();
     setMode("Leave", true, { arrive: 0.5, now: 0.5, leave: 1 });
+    handleType("Leave")
   };
 
   return (
@@ -94,7 +106,7 @@ export default function Departure() {
           </div>
         </div>
       </div>
-      {isActive !== "Now" && <SelectDayAndTime />}
+      {isActive !== "Now" && <SelectDayAndTime handlePeriod={handlePeriod} handleHour={handleHour} handleMinute={handleMinute} />}
     </div>
   );
 }
