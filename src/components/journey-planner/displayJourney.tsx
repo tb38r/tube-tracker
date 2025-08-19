@@ -4,8 +4,8 @@ import { LinearProgress } from "@mui/material";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useParams } from "react-router-dom";
 import {
-  createQueryString,
   IsFavourite,
+  createQueryString,
   formatTime,
 } from "../../utils/helpers";
 import { useLocaLStore, type JourneyObject } from "../hooks/useLocalStore";
@@ -103,6 +103,26 @@ export default function DisplayJourney() {
     saveJourney(journeyToSave);
   }, [from, to, journies, saveJourney, removeJourney]);
 
+  const journeySubHeading = useMemo(() => {
+    if (type === "Now") {
+      return "";
+    }
+
+    let suffix = ["Today", "Tomorrow"].includes(period as string)
+      ? ` ${period?.toLowerCase()}`
+      : ` on ${period}`;
+
+    if (type === "Arrive") {
+      return `Arriving at ${hour}:${minute}${suffix}`;
+    }
+
+    if (type === "Leave") {
+      return `Leaving at ${hour}:${minute}${suffix}`;
+    }
+
+    return "";
+  }, [period, hour, minute, type]);
+
   return (
     <>
       <div className="display-journeys">
@@ -126,10 +146,14 @@ export default function DisplayJourney() {
         <>
           {!loading && !error && data && (
             <div className="title-container">
-              <div className="journey-title">Journey results</div>
-              <div className="journey-subtitle">
+              <div className="journey-title">
                 {from?.replace(" Underground Station", "") || from} {"to"}{" "}
                 {to?.replace(" Underground Station", "") || to}
+              </div>
+              <div
+                className="journey-subtitle"
+              >
+                <span>{journeySubHeading}</span>
                 <span
                   onClick={() => handleFavourite()}
                   style={{ cursor: "pointer" }}
