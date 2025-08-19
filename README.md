@@ -1,4 +1,4 @@
-# TFL Travel Info
+# tube-tracker
 
-Your guide to navigating London
+Your guide to navigating the London underground
 
