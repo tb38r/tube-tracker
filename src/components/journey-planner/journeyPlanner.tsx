@@ -15,7 +15,6 @@ export default function JourneyPlanner() {
 
   const navigate = useNavigate();
 
-  console.log("jps", journeyPlannerState);
 
   const handleFromDestination = (dest: string) => {
     dispatch({ type: "from", destination: dest });

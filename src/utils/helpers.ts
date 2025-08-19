@@ -55,12 +55,7 @@ export const createQueryString = ({
   hour,
   minute,
 }: createQueryArgs): string => {
-  // console.log("QSTTRINg",   fromDest,
-  // toDest,
-  // type,
-  // period,
-  // hour,
-  // minute,)
+ 
   if (type === "Now" || !type) {
     const result = `${fromDest}/to/${toDest}?`;
     return result;
@@ -68,16 +63,12 @@ export const createQueryString = ({
   const days = getNextFiveDays()
   const selected = days.indexOf(period as string) || 0
   const date = getDateByOffset(selected)
-  console.log("date parsed??", date)
 
   const time = `${hour}${minute}`
-  console.log("time formatted", time)
 
   const timeIs = type === "Arrive" ? "Arriving" : "Departing"
-  console.log("timeIs formatted", timeIs)
 
   const result =`${fromDest}/to/${toDest}?date=${date}&time=${time}&timeIs=${timeIs}&`
-  console.log("fullString", result)
 
   return result;
 };

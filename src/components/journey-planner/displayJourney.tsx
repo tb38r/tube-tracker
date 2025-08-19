@@ -23,7 +23,6 @@ export default function DisplayJourney() {
   const [journies, saveJourney, removeJourney] = useLocaLStore();
 
   const { from, to, type, period, hour, minute } = useParams();
-  console.log(from, to, type, period, hour, minute);
 
   const apiKey = import.meta.env.VITE_API_KEY;
 
@@ -51,7 +50,6 @@ export default function DisplayJourney() {
     const fromDest =
       UndergroundStations[from as keyof typeof UndergroundStations];
     const toDest = UndergroundStations[to as keyof typeof UndergroundStations];
-    console.log('type', type)
     return createQueryString({ fromDest, toDest, type, period, hour, minute });
   }, [from, to, type, period, hour, minute]);
 
