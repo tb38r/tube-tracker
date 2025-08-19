@@ -1,0 +1,13 @@
+.day-and-hours{
+    display: flex;
+    flex-direction: row;
+    gap: 0.3rem
+}
+
+.select-hour-and-minute{
+    display: flex;
+    flex-direction: row;
+    gap: 0.3rem
+
+
+}

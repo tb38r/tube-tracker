@@ -12,7 +12,7 @@ function App() {
       <Route path="/" element={<Layout />}>
         <Route index element={<Home />} />
         <Route path="/arrivals/:tubestop" element={<DisplayArrivals />} />
-        <Route path="/journey/:from/:to" element={<DisplayJourney />} />
+        <Route path="/journey/:from/:to/:type?/:period?/:hour?/:minute?" element={<DisplayJourney />} />
         <Route path="*" element={<FourZeroFour/>} />
       </Route>
     </Routes>

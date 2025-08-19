@@ -64,6 +64,39 @@
   justify-content: center;
 }
 
+.departure-now{
+  display: flex;
+  gap: 0.2rem;
+}
+
+.departure-ctn{
+  display: flex;
+  flex-direction: row;
+  gap:0.7rem;
+  font-weight: 500;
+  align-items: center;
+  cursor: pointer;
+  width: 50%;
+
+}
+
+.departure-arrive:hover{
+  color: rgba(25, 118, 210,1)
+}
+
+.departure-options{
+  gap : 0.7rem
+}
+
+.time-options{
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  width: 80%;
+
+}
+
+
 @media (max-width: 768px) {
   .journey-title {
     font-size: 1.7rem;

@@ -3,76 +3,19 @@ import { Container, IconButton } from "@mui/material";
 import { useCallback, useReducer } from "react";
 import { useNavigate } from "react-router-dom";
 import Search from "../search-bar/search";
-import { StopPoints } from "../search-bar/stop-points/stops";
 import GoButton from "./goButton";
-
-type Action =
-  | { type: "from"; destination: string }
-  | { type: "to"; destination: string }
-  | {
-      type: "error";
-      destination: string;
-    };
-
-interface State {
-  from: string;
-  to: string;
-  error: boolean;
-  errorMsg: string;
-}
-
-const journeyPlannerObj: State = {
-  from: "",
-  to: "",
-  error: false,
-  errorMsg: "",
-};
-
-function reducer(state: State, action: Action): State {
-  if (!(action.destination in StopPoints)) {
-    return {
-      ...state,
-      error: true,
-      errorMsg: `Error : ${action.destination}`,
-    };
-  }
-
-  switch (action.type) {
-    case "error": {
-      return {
-        ...state,
-        error: true,
-        errorMsg: action.destination,
-      };
-    }
-    case "from":
-      return {
-        ...state,
-        from: action.destination,
-        error: false,
-        errorMsg: "",
-      };
-    case "to":
-      return {
-        ...state,
-        to: action.destination,
-        error: false,
-        errorMsg: "",
-      };
-    default:
-      return state;
-  }
-}
+import { journeyPlannerInitialState, journeyReducer } from "./journeyReducer";
+import Departure from "./time-options/departure";
 
 export default function JourneyPlanner() {
   const [journeyPlannerState, dispatch] = useReducer(
-    reducer,
-    journeyPlannerObj
+    journeyReducer,
+    journeyPlannerInitialState
   );
 
-  //const [toggleState, setToggleStates] = useState(journeyPlannerObj);
-
   const navigate = useNavigate();
+
+  console.log("jps", journeyPlannerState);
 
   const handleFromDestination = (dest: string) => {
     dispatch({ type: "from", destination: dest });
@@ -80,6 +23,21 @@ export default function JourneyPlanner() {
 
   const handleToDestination = (dest: string) => {
     dispatch({ type: "to", destination: dest });
+  };
+
+  const handleType = (dest: string) => {
+    dispatch({ type: "type", destination: dest });
+  };
+
+  const handlePeriod = (dest: string) => {
+    dispatch({ type: "period", destination: dest });
+  };
+  const handleHour = (dest: string) => {
+    dispatch({ type: "hour", destination: dest });
+  };
+
+  const handleMinute = (dest: string) => {
+    dispatch({ type: "minute", destination: dest });
   };
 
   const handleSubmit = () => {
@@ -93,22 +51,15 @@ export default function JourneyPlanner() {
         destination: "Cannot navigate to & from the same destination",
       });
     } else {
-      navigate(
-        `/journey/${journeyPlannerState.from}/${journeyPlannerState.to}`
-      );
+      const { from, to, type, period, hour, minute } = journeyPlannerState;
+      navigate(`/journey/${from}/${to}/${type}/${period}/${hour}/${minute}/`);
     }
   };
 
   const handleToggle = useCallback(() => {
-   
-
     dispatch({ type: "from", destination: journeyPlannerState.to });
     dispatch({ type: "to", destination: journeyPlannerState.from });
-
-
   }, [journeyPlannerState.from, journeyPlannerState.to]);
-
-  //console.log('togstates', toggleState)
 
   return (
     <Container
@@ -124,10 +75,12 @@ export default function JourneyPlanner() {
     >
       <span style={{ color: "black", fontWeight: "500" }}>Journey Planner</span>
 
-      <Search placeholder="Start" updateStation={handleFromDestination} value={journeyPlannerState.from}/>
-      <div
-        className="destination-toggle-container"
-      >
+      <Search
+        placeholder="Start"
+        updateStation={handleFromDestination}
+        value={journeyPlannerState.from}
+      />
+      <div className="destination-toggle-container">
         <IconButton>
           <SwapVertRoundedIcon
             fontSize="large"
@@ -137,13 +90,40 @@ export default function JourneyPlanner() {
         </IconButton>
       </div>
 
-      <Search placeholder="End" updateStation={handleToDestination} value={journeyPlannerState.to}/>
+      <Search
+        placeholder="End"
+        updateStation={handleToDestination}
+        value={journeyPlannerState.to}
+      />
       {journeyPlannerState.error && (
-        <span style={{ color: "red" }} className="journey-error">
-          {journeyPlannerState.errorMsg}
+        <span
+          style={{
+            backgroundColor: "rgb(235 44 44)",
+            display: "flex",
+            justifyContent: "center",
+            fontWeight: "500",
+            margin: "0.25rem",
+            borderRadius: "0.3rem",
+          }}
+          className="journey-error"
+        >
+          <span>&#9888;&nbsp;</span> {journeyPlannerState.errorMsg}
         </span>
       )}
-      <div style={{ width: "100%", display: "flex", justifyContent: "right" }}>
+      <div
+        style={{
+          width: "100%",
+          display: "flex",
+          justifyContent: "space-between",
+          padding: "0.3rem",
+        }}
+      >
+        <Departure
+          handleType={handleType}
+          handlePeriod={handlePeriod}
+          handleHour={handleHour}
+          handleMinute={handleMinute}
+        />
         <div className="go-button-container" onClick={() => handleSubmit()}>
           <GoButton />
         </div>
@@ -151,15 +131,3 @@ export default function JourneyPlanner() {
     </Container>
   );
 }
-
-/*
-     <IconButton>
-          {" "}
-          <SwapVerticalCircleIcon
-            fontSize="large"
-            sx={{ color: "lightblue", cursor: "pointer" }}
-            onClick={() => handleSubmit()}
-          />
-        </IconButton>
-
-*/
