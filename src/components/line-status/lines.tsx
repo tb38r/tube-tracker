@@ -30,7 +30,6 @@ export default function Lines() {
           return;
         }
         const data = await response.json();
-        console.log("data from resp", data)
         setLines(data);
       } catch (err) {
         console.error("Lines fetch failed:", err);
