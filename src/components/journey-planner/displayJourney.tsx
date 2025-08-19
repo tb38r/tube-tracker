@@ -4,7 +4,7 @@ import { LinearProgress } from "@mui/material";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useParams } from "react-router-dom";
 import {
-  CreateQueryString,
+  createQueryString,
   IsFavourite,
   formatTime,
 } from "../../utils/helpers";
@@ -51,7 +51,8 @@ export default function DisplayJourney() {
     const fromDest =
       UndergroundStations[from as keyof typeof UndergroundStations];
     const toDest = UndergroundStations[to as keyof typeof UndergroundStations];
-    return CreateQueryString({ fromDest, toDest, type, period, hour, minute });
+    console.log('type', type)
+    return createQueryString({ fromDest, toDest, type, period, hour, minute });
   }, [from, to, type, period, hour, minute]);
 
   useEffect(() => {
@@ -61,7 +62,7 @@ export default function DisplayJourney() {
     (async () => {
       try {
         const response = await fetch(
-          `https://api.tfl.gov.uk/journey/journeyresults/${queryString}?app_key=${apiKey}&mode=tube`
+          `https://api.tfl.gov.uk/journey/journeyresults/${queryString}app_key=${apiKey}&mode=tube`
         );
 
         if (!response.ok) {

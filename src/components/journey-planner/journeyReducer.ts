@@ -1,4 +1,3 @@
-import { StopPoints } from "../search-bar/stop-points/stops";
 import { type Action, type State } from "./types/journey-types";
 
 export const journeyPlannerInitialState: State = {

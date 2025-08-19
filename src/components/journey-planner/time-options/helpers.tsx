@@ -1,23 +1,3 @@
-const getNextFiveDays = (locale = "en-UK") => {
-  const today = new Date();
-  const days = [];
-
-  for (let i = 0; i < 5; i++) {
-    const date = new Date(today);
-    date.setDate(today.getDate() + i);
-    const dayName = date.toLocaleDateString(locale, { weekday: "long" });
-
-    if (i === 0) {
-      days.push("Today");
-    } else if (i === 1) {
-      days.push("Tomorrow");
-    } else {
-      days.push(dayName);
-    }
-  }
-
-  return days;
-};
 
 function tailHours<T>(arr: T[], start: T): T[] {
   const i = arr.indexOf(start);
@@ -95,7 +75,6 @@ const minutesArr = ["00", "10", "20", "30", "40", "50"];
 
 export {
   daysSX,
-  getNextFiveDays,
   hoursArr,
   minutesAndHoursSX,
   minutesArr,

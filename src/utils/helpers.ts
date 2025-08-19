@@ -25,7 +25,29 @@ export const IsFavourite = (
   );
 };
 
-export const CreateQueryString = ({
+export const getNextFiveDays = (locale = "en-UK") => {
+  const today = new Date();
+  const days = [];
+
+  for (let i = 0; i < 5; i++) {
+    const date = new Date(today);
+    date.setDate(today.getDate() + i);
+    const dayName = date.toLocaleDateString(locale, { weekday: "long" });
+
+    if (i === 0) {
+      days.push("Today");
+    } else if (i === 1) {
+      days.push("Tomorrow");
+    } else {
+      days.push(dayName);
+    }
+  }
+
+  return days;
+};
+
+
+export const createQueryString = ({
   fromDest,
   toDest,
   type,
@@ -33,10 +55,44 @@ export const CreateQueryString = ({
   hour,
   minute,
 }: createQueryArgs): string => {
-  if (type === "Now") {
-    const result = `${fromDest}/to/${toDest}`;
-    console.log("qstring", result);
+  // console.log("QSTTRINg",   fromDest,
+  // toDest,
+  // type,
+  // period,
+  // hour,
+  // minute,)
+  if (type === "Now" || !type) {
+    const result = `${fromDest}/to/${toDest}?`;
     return result;
   }
-  return "";
+  const days = getNextFiveDays()
+  const selected = days.indexOf(period as string) || 0
+  const date = getDateByOffset(selected)
+  console.log("date parsed??", date)
+
+  const time = `${hour}${minute}`
+  console.log("time formatted", time)
+
+  const timeIs = type === "Arrive" ? "Arriving" : "Departing"
+  console.log("timeIs formatted", timeIs)
+
+  const result =`${fromDest}/to/${toDest}?date=${date}&time=${time}&timeIs=${timeIs}&`
+  console.log("fullString", result)
+
+  return result;
+};
+
+
+const getDateYYYYMMDD = (date: Date): string => {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const day = String(date.getDate()).padStart(2, '0');
+  return `${year}${month}${day}`;
+};
+
+const getDateByOffset = (daysOffset: number): string => {
+  const today = new Date();
+  const targetDate = new Date(today);
+  targetDate.setDate(today.getDate() + daysOffset);
+  return getDateYYYYMMDD(targetDate);
 };

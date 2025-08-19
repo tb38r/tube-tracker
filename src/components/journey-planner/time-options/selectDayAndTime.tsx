@@ -1,6 +1,7 @@
 import { type SelectChangeEvent } from "@mui/material";
 import { useEffect, useState } from "react";
-import { daysSX, getNextFiveDays } from "./helpers";
+import { daysSX } from "./helpers";
+import { getNextFiveDays } from "../../../utils/helpers";
 import { JourneySelect } from "./journey-select";
 import SelectTime from "./selectTime";
 import "./styles/time.css";
