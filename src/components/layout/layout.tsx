@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { Outlet } from "react-router-dom";
 import Arrivals from "../arrivals/arrivals";
 import Favourites from "../favourites/favourites";
@@ -7,8 +6,7 @@ import JourneyPlanner from "../journey-planner/journeyPlanner";
 import Lines from "../line-status/lines";
 
 export default function Layout() {
-  const [hasStatus, setHasStatus] = useState(false);
-  return (
+return (
     <div className="app-container">
       <Header />
       <div className="layout-container">

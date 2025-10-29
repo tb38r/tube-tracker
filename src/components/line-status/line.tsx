@@ -2,7 +2,7 @@ import { Paper, styled } from "@mui/material";
 import Dot from "./dot";
 
 export default function Line(props: any) {
-  const { line, status, color, statusColor } = props;
+  const { line, status, color, statusColor, handleSelectedLine } = props;
   const WrappedPaper = styled(Paper)(() => ({})) as typeof Paper;
 
   return (
@@ -19,7 +19,7 @@ export default function Line(props: any) {
         paddingX: "10px",
         backgroundColor: "#E1EBEE",
       }}
-      onClick={() => console.log("hi")}
+      onClick={()=>handleSelectedLine(line)}
       elevation={0}
     >
       <span style={{ fontWeight: "600" }} className="line-name">

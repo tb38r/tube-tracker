@@ -41,42 +41,51 @@ export const TubeLineColors: Record<TubeLine, string> = {
 };
 
 export enum StatusColor {
-  Green = "#4CAF50", 
-  Yellow = "#FFC107", 
-  Orange = "#FF9800", 
+  Green = "#4CAF50",
+  Yellow = "#FFC107",
+  Orange = "#FF9800",
   Red = "#F44336",
-  Blue = "#2196F3", 
-  Grey = "#9E9E9E", 
+  Blue = "#2196F3",
+  Grey = "#9E9E9E",
 }
 
 export const SeverityColorMap: Record<number, StatusColor> = {
-  0: StatusColor.Blue, 
+  0: StatusColor.Blue,
   1: StatusColor.Red,
-  2: StatusColor.Red, 
-  3: StatusColor.Red, 
-  4: StatusColor.Orange, 
-  5: StatusColor.Orange, 
-  6: StatusColor.Red, 
-  7: StatusColor.Yellow, 
+  2: StatusColor.Red,
+  3: StatusColor.Red,
+  4: StatusColor.Orange,
+  5: StatusColor.Orange,
+  6: StatusColor.Red,
+  7: StatusColor.Yellow,
   8: StatusColor.Blue,
-  9: StatusColor.Yellow, 
-  10: StatusColor.Green, 
+  9: StatusColor.Yellow,
+  10: StatusColor.Green,
   11: StatusColor.Orange,
-  12: StatusColor.Grey, 
-  13: StatusColor.Grey, 
-  14: StatusColor.Orange, 
+  12: StatusColor.Grey,
+  13: StatusColor.Grey,
+  14: StatusColor.Orange,
   15: StatusColor.Red,
-  16: StatusColor.Red, 
-  17: StatusColor.Yellow, 
-  18: StatusColor.Green, 
-  19: StatusColor.Yellow, 
+  16: StatusColor.Red,
+  17: StatusColor.Yellow,
+  18: StatusColor.Green,
+  19: StatusColor.Yellow,
 };
 
+export interface Disruption {
+  category: string;
+  categoryDescription: string;
+  description: string;
+  affectedRoutes: string[]; 
+  affectedStops: string[];
+  closureText: string;
+}
 
 export interface LineStatus {
   statusSeverity: number;
   statusSeverityDescription: string;
   reason?: string;
+  disruption: Disruption;
 }
 
 export interface TubeData {
