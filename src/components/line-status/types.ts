@@ -71,3 +71,17 @@ export const SeverityColorMap: Record<number, StatusColor> = {
   18: StatusColor.Green, 
   19: StatusColor.Yellow, 
 };
+
+
+export interface LineStatus {
+  statusSeverity: number;
+  statusSeverityDescription: string;
+  reason?: string;
+}
+
+export interface TubeData {
+  id: string;
+  name: string;
+  modeName: string;
+  lineStatuses: LineStatus[];
+}

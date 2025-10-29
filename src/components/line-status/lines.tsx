@@ -1,42 +1,20 @@
-import { useEffect, useState } from "react";
-import { TubeLineColors, TubeLineNameMap } from "./types";
-import { SeverityColorMap } from "./types";
 import Line from "./line";
+import { SeverityColorMap, TubeLineColors, TubeLineNameMap } from "./types";
 
-interface LineStatus {
-  statusSeverity: number;
-  statusSeverityDescription: string;
-  reason?: string;
-}
-
-interface TubeData {
-  id: string;
-  name: string;
-  modeName: string;
-  lineStatuses: LineStatus[];
-}
+import useLineStatus from "../hooks/useLineStatus";
 
 export default function Lines() {
-  const [lines, setLines] = useState<TubeData[]>([]);
+  const [lines, error] = useLineStatus();
 
-  useEffect(() => {
-    (async () => {
-      try {
-        const response = await fetch(
-          "https://api.tfl.gov.uk/Line/Mode/tube/Status"
-        );
-        if (!response.ok) {
-          console.error("Error fetching line data", response);
-          return;
-        }
-        const data = await response.json();
-        setLines(data);
-      } catch (err) {
-        console.error("Lines fetch failed:", err);
-      }
-    })();
-  }, []);
+  if (error) {
+    console.log("true");
+  } else {
+    console.log("false");
+  }
 
+  console.log(lines)
+
+//handle error
 
   return lines.map((line, i) => {
     const severity = line.lineStatuses[0].statusSeverity;
@@ -45,7 +23,6 @@ export default function Lines() {
     const lineColour = TubeLineColors[lineName];
 
     return (
-      
       <span key={i}>
         <Line
           line={line?.name}
