@@ -11,11 +11,20 @@ export default function Lines() {
   const [errorMessage, setErrorMessage] = useState<{
     status: string;
     description: string;
+    color: string;
   } | null>(null);
 
-  const handleSelectedLine = useCallback((line: string) => {
+  const handleSelectedLine = useCallback((line: string, severity: number) => {
+    if (severity === 10) {
+      return;
+    }
     setSelectedLine(line);
   }, []);
+
+  const handleShowLines = useCallback(()=>{
+    setSelectedLine('')
+
+  },[])
 
   useEffect(() => {
     const selected = lines.find((line) => line.name === selectedLine);
@@ -24,11 +33,11 @@ export default function Lines() {
       const status = selected.lineStatuses[0]?.statusSeverityDescription || "";
       const description =
         selected.lineStatuses[0]?.disruption?.description || "";
-      setErrorMessage({ status, description });
+      const color = TubeLineColors[TubeLineNameMap[selected.name]];
+      setErrorMessage({ status, description, color });
     } else {
       setErrorMessage(null);
     }
-
   }, [selectedLine, lines]);
 
   const linesComponent = useMemo(() => {
@@ -46,6 +55,7 @@ export default function Lines() {
             statusColor={severityColor}
             color={lineColour}
             handleSelectedLine={handleSelectedLine}
+            severity={severity}
           />
         </span>
       );
@@ -59,7 +69,13 @@ export default function Lines() {
   }
 
   return selectedLine ? (
-    <ErrorMessage status={errorMessage?.status as string} description={errorMessage?.description as string} />
+    <ErrorMessage
+      status={errorMessage?.status as string}
+      description={errorMessage?.description as string}
+      color={errorMessage?.color as string}
+      showLines = {handleShowLines}
+
+    />
   ) : (
     linesComponent
   );
