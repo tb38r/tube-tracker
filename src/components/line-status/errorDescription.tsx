@@ -8,7 +8,7 @@ type LineErrorProps = {
 };
 
 export default function ErrorMessage(props: LineErrorProps) {
-  const { status, description, color, showLines } = props;
+  const {description, color, showLines } = props;
 
   return (
     <div style={{ color: "black", padding: "1rem", height: "90%" }}>
