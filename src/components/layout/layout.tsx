@@ -1,12 +1,12 @@
 import { Outlet } from "react-router-dom";
 import Arrivals from "../arrivals/arrivals";
+import Favourites from "../favourites/favourites";
 import Header from "../header/header";
 import JourneyPlanner from "../journey-planner/journeyPlanner";
 import Lines from "../line-status/lines";
-import Favourites from "../favourites/favourites";
 
 export default function Layout() {
-  return (
+return (
     <div className="app-container">
       <Header />
       <div className="layout-container">
@@ -21,20 +21,20 @@ export default function Layout() {
             >
               <JourneyPlanner />
             </div>
-              <Favourites/>
+            <Favourites />
           </div>
           <div className="bottom-left-section">
-          <div
-            style={{
-              padding: "5px",
-              borderRadius: "4px",
-              color: "black",
-              fontWeight: "500",
-              paddingLeft:"0.75rem"
-            }}
-          >
-            Status Updates
-          </div>
+            <div
+              style={{
+                padding: "5px",
+                borderRadius: "4px",
+                color: "black",
+                fontWeight: "500",
+                paddingLeft: "0.75rem",
+              }}
+            >
+              Status Updates
+            </div>
             <div className="lines-component">
               <Lines />
             </div>

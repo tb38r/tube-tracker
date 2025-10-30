@@ -26,6 +26,8 @@ export default function DisplayJourney() {
 
   const apiKey = import.meta.env.VITE_API_KEY;
 
+  const notNow = (type !== 'Arrive' && type !== 'Leave')
+
   useEffect(() => {
     setData(undefined);
 
@@ -154,7 +156,7 @@ export default function DisplayJourney() {
                 className="journey-subtitle"
               >
                 <span>{journeySubHeading}</span>
-                <span
+               {notNow && <span
                   onClick={() => handleFavourite()}
                   style={{ cursor: "pointer" }}
                 >
@@ -173,7 +175,7 @@ export default function DisplayJourney() {
                       <FavoriteBorderOutlinedIcon />
                     )}
                   </LightTooltip>
-                </span>
+                </span>}
               </div>
             </div>
           )}
